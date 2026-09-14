@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="A short explanation of file offsets, relative virtual addresses, and virtual addresses in PE files.">
+    <meta property="og:title" content="File offsets vs. memory addresses">
+    <meta property="og:description" content="Understanding file offsets, RVAs, and virtual addresses.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://sacredcodr.github.io/writing/file-offsets-and-rvas/">
+    <link rel="canonical" href="https://sacredcodr.github.io/writing/file-offsets-and-rvas/">
+    <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="../../style.css?v=20260914">
+    <title>File offsets vs. memory addresses / sacred</title>
+</head>
+<body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <div class="page">
+        <header class="sidebar">
+            <a class="wordmark" href="../../" aria-label="sacred home">sacred<span>.</span></a>
+            <nav aria-label="Links">
+                <a href="../../"><span class="nav-label"><span class="nav-peek" aria-hidden="true"><span class="nav-peek-mover"><span class="nav-peek-art"></span></span></span>home</span></a>
+                <a class="current" href="../" aria-current="location"><span class="nav-label"><span class="nav-peek" aria-hidden="true"><span class="nav-peek-mover"><span class="nav-peek-art"></span></span></span>writing</span></a>
+                <a href="https://github.com/sacredcodr"><span class="nav-label"><span class="nav-peek" aria-hidden="true"><span class="nav-peek-mover"><span class="nav-peek-art"></span></span></span>github <span aria-hidden="true">↗</span></span></a>
+                <a href="https://www.linkedin.com/in/yogesh-pachl-2646543b8/"><span class="nav-label"><span class="nav-peek" aria-hidden="true"><span class="nav-peek-mover"><span class="nav-peek-art"></span></span></span>linkedin <span aria-hidden="true">↗</span></span></a>
+            </nav>
+        </header>
+        <main id="main" class="reading-page">
+            <article class="article">
+                <header>
+                    <a class="back-link" href="../">← all writing</a>
+                    <h1>File offsets vs. memory addresses</h1>
+                    <p class="article-meta">Draft &middot; Windows / PE</p>
+                </header>
+                <p>A location in a PE file can mean a position on disk or an address in memory. The number alone doesn't tell you which.</p>
+                <dl class="definitions">
+                    <div><dt>File offset</dt><dd>A byte position measured from the beginning of the file on disk.</dd></div>
+                    <div><dt>RVA</dt><dd>A relative virtual address: a location in the loaded image, measured from its base.</dd></div>
+                    <div><dt>VA</dt><dd>The virtual address in a process. Add the actual load base to the RVA.</dd></div>
+                </dl>
+                <h2>A small example</h2>
+                <p>Add the RVA to the image's actual load base to get its virtual address. Here is an illustrative calculation:</p>
+                <div class="address-example" role="group" aria-label="Virtual address calculation">
+                    <div class="address-input"><span class="operator" aria-hidden="true"></span><code>0x140000000</code><span class="address-label">Load base</span></div>
+                    <div class="address-input"><span class="operator" aria-hidden="true">+</span><code>0x2100</code><span class="address-label">RVA</span></div>
+                    <div class="address-result"><span class="operator" aria-hidden="true">=</span><code>0x140002100</code><span class="address-label">Virtual address</span></div>
+                </div>
+                <p>That calculation does not locate the bytes on disk. Sections have separate positions in the file and the loaded image; an RVA is generally not a file offset.</p>
+                <h2>When reading a tool's output</h2>
+                <p>Check which kind of address it displays before comparing numbers. If the image loads at a different base, the VA changes even when the RVA stays the same.</p>
+                <p class="article-source">Reference: <a href="https://learn.microsoft.com/en-us/windows/win32/debug/pe-format#general-concepts">Microsoft's PE format specification</a>.</p>
+                <div class="article-cat-end" aria-hidden="true"><span class="ink-cat cat-peek"></span></div>
+            </article>
+
+        </main>
+    </div>
+</body>
+</html>

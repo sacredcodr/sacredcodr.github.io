@@ -1,0 +1,229 @@
+:root {
+    color-scheme: dark;
+    --paper: #101112;
+    --ink: #c7cacc;
+    --muted: #969da1;
+    --accent: #ced5d1;
+    --line: #2b2f31;
+    font-family: "Segoe UI", Arial, sans-serif;
+    color: var(--ink);
+    background: var(--paper);
+    font-synthesis: none;
+}
+* { box-sizing: border-box; }
+body { margin: 0; }
+a { color: inherit; text-underline-offset: 4px; text-decoration-thickness: 1px; }
+a:hover { color: #eef0ef; }
+a:focus-visible { outline: 2px solid var(--accent); outline-offset: 5px; }
+::selection { background: #3b4842; }
+.skip-link { position: absolute; top: -80px; left: 20px; padding: 12px; background: var(--paper); z-index: 2; }
+.skip-link:focus { top: 8px; }
+.page { max-width: 688px; margin: 0 auto; padding: 24px 24px 48px; }
+.home-page { padding-top: 0; }
+.header-art { height: 205px; overflow: hidden; margin: 0 -16px; position: relative; }
+.header-art img { width: 125%; height: 100%; transform: translateX(-20%); display: block; object-fit: cover; object-position: 50% 18%; filter: grayscale(1) brightness(0.5); }
+.header-art::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to bottom, transparent 55%, var(--paper)), linear-gradient(to right, var(--paper), transparent 14%, transparent 86%, var(--paper)); pointer-events: none; }
+.sidebar { border-bottom: 1px solid var(--line); }
+nav { display: flex; align-items: center; gap: 25px; padding: 10px 0; }
+nav a { display: inline-flex; align-items: center; min-height: 40px; font-size: 12px; text-decoration: none; color: var(--muted); }
+nav a:nth-child(3) { margin-left: auto; }
+nav .current { color: var(--ink); text-decoration: underline; text-decoration-color: #727b77; }
+nav a span { margin-left: 5px; font-size: 11px; }
+main { margin: 38px 0 0; }
+h1 { font-size: 25px; font-weight: 500; line-height: 1.35; letter-spacing: -0.5px; margin: 0 0 24px; }
+h1 span { color: var(--muted); font-weight: 400; font-size: 18px; letter-spacing: 0; }
+p { font-size: 15px; line-height: 1.9; margin: 16px 0 0; }
+.intro p { max-width: 585px; }
+.intro p + p { color: var(--muted); }
+h2 { font-size: 13px; font-weight: 500; margin: 0 0 18px; color: var(--muted); }
+.writing { margin-top: 36px; padding-top: 28px; border-top: 1px solid var(--line); }
+.post-link { display: grid; grid-template-columns: minmax(0,1fr) 16px; gap: 8px 18px; text-decoration: none; padding: 0 0 20px; }
+.post-date { grid-column: 1 / -1; font-family: Consolas, monospace; font-size: 11px; color: var(--muted); line-height: 1.8; }
+.post-link strong { font-size: 16px; line-height: 1.6; font-weight: 500; }
+.post-summary { display: block; margin-top: 5px; font-size: 13px; color: var(--muted); line-height: 1.7; }
+.post-arrow { font-size: 14px; color: var(--muted); padding-top: 3px; }
+.post-link:hover strong { text-decoration: underline; }
+.art-credit { border-top: 1px solid var(--line); margin-top: 18px; padding-top: 18px; font-size: 11px; line-height: 1.6; color: var(--muted); }
+.art-credit a { text-decoration: none; }
+.page-description { color: var(--muted); margin-top: -12px; font-size: 14px; }
+.post-list { border-top: 1px solid var(--line); margin-top: 30px; padding-top: 22px; }
+.article header { border-bottom: 1px solid var(--line); padding-bottom: 24px; margin-bottom: 26px; }
+.article h1 { margin: 22px 0 14px; font-size: 27px; line-height: 1.4; letter-spacing: -0.6px; }
+.article h2 { color: var(--ink); margin: 30px 0 12px; font-size: 16px; }
+.article p { font-size: 15px; line-height: 1.9; }
+.article .article-meta { font-family: Consolas, monospace; font-size: 11px; color: var(--muted); margin: 0; }
+.back-link { font-size: 12px; color: var(--muted); text-decoration: none; }
+.definitions { margin: 24px 0; }
+.definitions div { display: grid; grid-template-columns: 88px 1fr; gap: 18px; padding: 14px 0; border-bottom: 1px solid var(--line); }
+.definitions dt { font-family: Consolas, monospace; font-size: 12px; padding-top: 3px; }
+.definitions dd { margin: 0; font-size: 14px; line-height: 1.8; color: var(--muted); }
+.article code { font-family: Consolas, monospace; font-size: 0.9em; }
+.address-example { margin: 22px 0; padding: 18px; border: 1px solid var(--line); background: #151819; font-family: Consolas, monospace; font-size: 17px; }
+.address-example > div { display: grid; grid-template-columns: 1ch 11ch minmax(0,1fr); align-items: baseline; column-gap: 16px; padding: 8px 0; }
+.address-label { font-family: "Segoe UI", Arial, sans-serif; font-size: 12px; line-height: 1.5; color: var(--muted); }
+.address-example code { font-size: inherit; white-space: nowrap; text-align: right; font-variant-numeric: tabular-nums; }
+.operator { color: var(--muted); }
+.address-example .address-result { margin-top: 8px; padding-top: 14px; border-top: 1px solid var(--line); }
+.address-result code { color: #c7d8cd; }
+.article .article-source { font-size: 12px; color: var(--muted); margin-top: 30px; padding-top: 22px; border-top: 1px solid var(--line); }
+@media (max-width: 480px) {
+    .page { padding: 14px 22px 32px; }
+    .home-page { padding-top: 0; }
+    .header-art { height: 165px; margin-inline: -14px; }
+    nav { gap: 20px; }
+    nav a { min-height: 44px; }
+    main { margin-top: 28px; }
+    h1 { font-size: 24px; }
+    h1 span { font-size: 17px; }
+    .article h1 { font-size: 25px; }
+    .definitions div { grid-template-columns: 1fr; gap: 5px; }
+    .address-example { padding: 14px; font-size: 15px; }
+    .address-example > div { column-gap: 8px; }
+    .address-label { font-size: 11px; }
+}
+
+/* Independent homepage composition; shared article typography stays intact. */
+.page { max-width: 1056px; padding: 32px 36px 60px; }
+.sidebar { display: flex; justify-content: space-between; align-items: center; gap: 28px; padding-bottom: 16px; }
+.wordmark { font-size: 26px; font-weight: 650; letter-spacing: -1.2px; text-decoration: none; }
+.wordmark span { color: #aebacc; }
+nav { gap: 26px; padding: 0; }
+nav a:nth-child(3) { margin-left: 0; }
+.home-page main { display: grid; grid-template-columns: minmax(0, 340px) minmax(0, 1fr); gap: 72px; margin-top: 76px; }
+.intro-label { font: 11px Consolas, monospace; color: var(--muted); margin: 0 0 24px; }
+.intro h1 { font-size: 31px; font-weight: 500; letter-spacing: -0.8px; margin-bottom: 24px; }
+.intro p { font-size: 15px; }
+.writing { margin: 0; border: 0; border-left: 1px solid var(--line); padding: 0 0 34px 36px; }
+.writing > h2 { font: 11px Consolas, monospace; margin: 0 0 24px; }
+.writing .post-link { border-top: 2px solid #aebacc; padding-top: 22px; gap: 14px; }
+.writing .post-link strong { font-size: 24px; font-weight: 450; line-height: 1.4; letter-spacing: -0.5px; }
+.writing .post-summary { font-size: 14px; margin-top: 16px; line-height: 1.8; }
+.post-arrow { color: #aebacc; }
+.reading-page { max-width: 660px; margin: 54px auto 0; }
+@media (max-width: 740px) {
+    .page { padding: 24px 24px 44px; }
+    .sidebar { flex-wrap: wrap; gap: 18px; }
+    nav { gap: 22px; }
+    .home-page main { display: block; margin-top: 40px; }
+    .intro { max-width: 480px; }
+    .intro-label { margin-bottom: 16px; }
+    .writing { margin-top: 40px; padding: 0; border: 0; }
+    .writing .post-link { padding-top: 20px; }
+    .reading-page { margin-top: 34px; }
+}
+@media (max-width: 420px) {
+    .page { padding-inline: 22px; }
+    .sidebar nav { width: 100%; justify-content: space-between; gap: 12px; }
+    .writing .post-link strong { font-size: 22px; }
+}
+
+/* The head stays fixed; the generated eye details close together. */
+.cat-corner { display:flex; align-items:end; gap:22px; margin-top:28px; }
+.reference-cat {
+    position:relative; flex:none; width:136px; height:136px; overflow:hidden; filter:contrast(2);
+    background:transparent url('./assets/reference-cat-blink.png') no-repeat 0 0 / 300% 100%;
+    mask:url('./assets/reference-cat-mask.svg') 0 0 / 100% 100% no-repeat;
+}
+.cat-eye-overlay { position:absolute; inset:0; clip-path:inset(0 0 100% 0); animation:reference-blink 3s ease-in-out infinite; }
+.cat-eye-overlay::before,.cat-eye-overlay::after { content:""; position:absolute; inset:0; }
+/* Cover the open eyes without changing the face silhouette. */
+.cat-eye-overlay::before {
+    background:#000;
+    clip-path:polygon(0 41%,17% 41%,23% 53%,42% 53%,51% 60%,52% 79%,42% 87%,26% 87%,18% 76%,18% 74%,0 75%);
+}
+/* Read the closed-eye strokes from the generated third frame. */
+.cat-eye-overlay::after {
+    background:url('./assets/reference-cat-blink.png') no-repeat 100% 0 / 300% 100%;
+    clip-path:polygon(0 61%,18% 61%,18% 66%,26% 66%,26% 62%,47% 62%,47% 80%,26% 80%,26% 71%,18% 71%,18% 72%,0 72%);
+}
+@keyframes reference-blink {
+    0%,92%,98%,100% { clip-path:inset(0 0 100% 0); }
+    94%,95% { clip-path:inset(0); }
+}
+
+/* Generated ink companions: the mask preserves white details inside each cat. */
+.ink-cat {
+    display:block; width:116px; aspect-ratio:1; pointer-events:none;
+    background:url('./assets/ink-cat-companions.png') 0 0 / 300% 100% no-repeat;
+    mask:url('./assets/ink-cat-companions-mask.svg') 0 0 / 300% 100% no-repeat;
+    filter:contrast(2);
+}
+.cat-peek {
+    background-position:0 0; mask-position:0 0;
+    transform-origin:50% 85%; animation:cat-curious 6.4s ease-in-out infinite;
+}
+.cat-sleep {
+    background-position:50% 0; mask-position:50% 0; width:154px;
+    transform-origin:55% 86.5%; animation:cat-breathe 3.8s ease-in-out infinite;
+}
+.cat-upside {
+    background-position:100% 0; mask-position:100% 0;
+    transform-origin:50% 12%; animation:cat-sway 5.8s ease-in-out infinite;
+}
+@keyframes cat-curious {
+    0%,18%,78%,100% { transform:rotate(0deg); }
+    32%,46% { transform:rotate(-4deg); }
+    60% { transform:rotate(2deg); }
+}
+@keyframes cat-breathe {
+    0%,100% { transform:scale(1,1); }
+    50% { transform:scale(1.012,1.04); }
+}
+@keyframes cat-sway {
+    0%,100% { transform:rotate(-3deg); }
+    50% { transform:rotate(3deg); }
+}
+.cat-header { position:relative; }
+.writing-cat-rest { display:flex; justify-content:flex-end; margin-top:40px; }
+.home-page .writing { position:relative; }
+.home-page .writing > h2 { min-height:66px; display:flex; align-items:flex-end; }
+.home-page .writing > .writing-cat-rest { position:absolute; top:-15px; right:0; margin:0; pointer-events:none; }
+.home-page .writing > .writing-cat-rest .cat-sleep { width:120px; }
+.cat-post-list { position:relative; }
+.writing-index .cat-post-list { margin-top:108px; border-top:2px solid #aebacc; }
+.writing-divider-cat { position:absolute; width:120px; top:-105px; right:0; }
+.article-cat-end { display:flex; justify-content:center; margin-top:32px; border-bottom:1px solid var(--line); }
+.article-cat-end .cat-peek { margin-bottom:-20px; animation-delay:-2.2s; }
+@media(max-width:740px) {
+    .writing-cat-rest { margin-top:12px; }
+    .cat-sleep { width:126px; }
+}
+/* The cat emerges behind the top edge of the actual word, not the link hit area. */
+.page { padding-top:48px; }
+.sidebar nav .nav-label { position:relative; display:inline-block; margin:0; font:inherit; line-height:18px; }
+.sidebar nav .nav-peek {
+    position:absolute; width:46px; height:44px; margin:0;
+    left:50%; bottom:calc(100% - 7px); transform:translateX(-50%);
+    overflow:hidden; pointer-events:none;
+}
+.sidebar nav .nav-peek-mover {
+    display:block; width:46px; height:46px; margin:0;
+    transform:translateY(48px);
+    transition:transform 260ms cubic-bezier(.4,0,.7,.2);
+}
+.sidebar nav .nav-peek-art {
+    display:block; width:46px; height:46px; margin:0;
+    background:url('./assets/ink-cat-companions.png') 0 0 / 300% 100% no-repeat;
+    mask:url('./assets/ink-cat-companions-mask.svg') 0 0 / 300% 100% no-repeat;
+    filter:contrast(2); clip-path:inset(10% 5% 15% 11%); transform-origin:50% 85%;
+}
+.sidebar nav a:focus-visible { outline:none; }
+.sidebar nav a:focus-visible .nav-label { text-decoration:underline; text-decoration-thickness:2px; text-decoration-color:var(--accent); }
+.sidebar nav a:focus-visible .nav-peek-mover {
+    transform:translateY(4px); transition:transform 420ms cubic-bezier(.22,1.12,.36,1);
+}
+.sidebar nav a:focus-visible .nav-peek-art { animation:nav-cat-curious 3.6s 450ms ease-in-out infinite; }
+@media(hover:hover) {
+    .sidebar nav a:hover .nav-peek-mover {
+        transform:translateY(4px); transition:transform 420ms cubic-bezier(.22,1.12,.36,1);
+    }
+    .sidebar nav a:hover .nav-peek-art { animation:nav-cat-curious 3.6s 450ms ease-in-out infinite; }
+}
+@keyframes nav-cat-curious {
+    0%,15%,85%,100% { transform:rotate(0deg); }
+    35%,50% { transform:rotate(-5deg); }
+    67% { transform:rotate(3deg); }
+}
+@media(max-width:420px) {
+    .sidebar nav { margin-top:20px; }
+}
