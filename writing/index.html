@@ -3,7 +3,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Technical notes by yugi on native software, C++, and binary analysis.">
+    <meta name="author" content="Yogesh">
+    <meta name="description" content="Technical notes by Yogesh (Yugi) on native software, C++, and binary analysis.">
     <link rel="canonical" href="https://sacredcodr.github.io/writing/">
     <link rel="icon" href="../favicon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="../style.css?v=b7a844a58f18">
@@ -25,14 +26,30 @@
             <h1>writing</h1>
             <p class="page-description">short notes on native software and binary analysis.</p>
             <div class="topic-filters" role="group" aria-label="Filter writing by topic" hidden>
-                <button type="button" data-topic="all" aria-pressed="true">all <span>2</span></button>
-                <button type="button" data-topic="developer-tools" aria-pressed="false">developer tools <span>1</span></button>
+                <button type="button" data-topic="all" aria-pressed="true">all <span>4</span></button>
+                <button type="button" data-topic="developer-tools" aria-pressed="false">developer tools <span>2</span></button>
+                <button type="button" data-topic="reverse-engineering" aria-pressed="false">reverse engineering <span>1</span></button>
+                <button type="button" data-topic="ai" aria-pressed="false">AI <span>1</span></button>
                 <button type="button" data-topic="windows" aria-pressed="false">windows <span>1</span></button>
                 <button type="button" data-topic="binary-formats" aria-pressed="false">binary formats <span>1</span></button>
             </div>
             <p class="filter-status" role="status" aria-live="polite"></p>
             <div class="post-list cat-post-list">
                 <span class="ink-cat cat-sleep writing-divider-cat" aria-hidden="true"></span>
+                <article class="writing-entry" data-tags="reverse-engineering">
+                    <a class="post-link" href="./reading-decompiler-output/">
+                        <span class="post-copy"><strong>What a decompiler can actually tell you</strong><span class="post-summary">Readable code, missing context, and the names we add ourselves.</span></span>
+                        <span class="post-arrow" aria-hidden="true">&rarr;</span>
+                    </a>
+                    <div class="topic-tags" aria-label="Topics"><a class="topic-tag" href="./?tag=reverse-engineering">reverse engineering</a></div>
+                </article>
+                <article class="writing-entry" data-tags="ai developer-tools">
+                    <a class="post-link" href="./checking-ai-code-explanations/">
+                        <span class="post-copy"><strong>Check the claim behind the explanation</strong><span class="post-summary">A small example of the assumptions an AI explanation can hide.</span></span>
+                        <span class="post-arrow" aria-hidden="true">&rarr;</span>
+                    </a>
+                    <div class="topic-tags" aria-label="Topics"><a class="topic-tag" href="./?tag=ai">AI</a><a class="topic-tag" href="./?tag=developer-tools">developer tools</a></div>
+                </article>
                 <article class="writing-entry" data-tags="developer-tools">
                     <a class="post-link" href="./useful-error-messages/">
                         <span class="post-copy"><strong>Give the error somewhere to go</strong><span class="post-summary">Useful context, honest causes, and a next step.</span></span>

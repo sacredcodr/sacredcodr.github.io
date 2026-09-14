@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="Yogesh">
+    <meta name="description" content="Readable code, missing context, and the names we add ourselves.">
+    <meta property="og:title" content="What a decompiler can actually tell you">
+    <meta property="og:description" content="Readable code, missing context, and the names we add ourselves.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://sacredcodr.github.io/writing/reading-decompiler-output/">
+    <link rel="canonical" href="https://sacredcodr.github.io/writing/reading-decompiler-output/">
+    <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="../../style.css?v=b7a844a58f18">
+    <title>What a decompiler can actually tell you / sacred</title>
+</head>
+<body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <div class="page">
+        <header class="sidebar">
+            <a class="wordmark" href="../../" aria-label="sacred home">sacred<span>.</span></a>
+            <nav aria-label="Links">
+                <a href="../../"><span class="nav-label"><span class="nav-peek" aria-hidden="true"><span class="nav-peek-mover"><span class="nav-peek-art"></span></span></span>home</span></a>
+                <a class="current" href="../" aria-current="location"><span class="nav-label"><span class="nav-peek" aria-hidden="true"><span class="nav-peek-mover"><span class="nav-peek-art"></span></span></span>writing</span></a>
+                <a href="https://github.com/sacredcodr"><span class="nav-label"><span class="nav-peek" aria-hidden="true"><span class="nav-peek-mover"><span class="nav-peek-art"></span></span></span>github <span aria-hidden="true">↗</span></span></a>
+                <a href="https://www.linkedin.com/in/yogesh-pachl-2646543b8/"><span class="nav-label"><span class="nav-peek" aria-hidden="true"><span class="nav-peek-mover"><span class="nav-peek-art"></span></span></span>linkedin <span aria-hidden="true">↗</span></span></a>
+            </nav>
+        </header>
+        <main id="main" class="reading-page">
+            <article class="article">
+                <header>
+                    <a class="back-link" href="../">← all writing</a>
+                    <h1>What a decompiler can actually tell you</h1>
+                    <div class="topic-tags" aria-label="Topics"><a class="topic-tag" href="../?tag=reverse-engineering">reverse engineering</a></div>
+                </header>
+                <p>A decompiler gives you a readable reconstruction of a compiled program. It does not necessarily give you the source the author wrote. Comments, abstractions, and other source-level details can be missing, as <a href="https://hex-rays.com/blog/return-to-the-sources">Hex-Rays explains</a>.</p>
+                <figure class="error-comparison">
+                    <figcaption>Native code: a simplified view</figcaption>
+                    <div class="error-version">
+                        <span class="example-label">Compilation</span>
+                        <code>Source code &rarr; machine code</code>
+                    </div>
+                    <div class="error-version error-version-useful">
+                        <span class="example-label">Decompilation</span>
+                        <code>Machine code &rarr; reconstructed pseudocode</code>
+                    </div>
+                </figure>
+                <p>Some names and types may still be available through debug symbols. <a href="https://learn.microsoft.com/en-us/windows-hardware/drivers/debugger/symbols">Microsoft's symbol documentation</a> describes that information. A name you add during analysis has a different origin: it records your interpretation.</p>
+                <h2>Take a name like <code>itemCount</code></h2>
+                <p>Suppose a value is compared with a loop counter to decide when the loop stops. Renaming it <code>itemCount</code> suggests a purpose that the comparison alone does not establish.</p>
+                <dl class="error-details">
+                    <div><dt>Observed</dt><dd>The value is used in the loop's stopping condition.</dd></div>
+                    <div><dt>Possible</dt><dd>It is a number of items, a capacity, or another limit.</dd></div>
+                    <div><dt>To check</dt><dd>Where the value comes from and how the loop uses it.</dd></div>
+                </dl>
+                <p>This is an illustrative example. The point is to keep a useful guess from becoming an undocumented assumption.</p>
+                <aside class="article-check">
+                    <h2>Keep the reason with the name</h2>
+                    <p><code>Possible item count; caller not checked.</code></p>
+                    <p>A note like this tells the next reader what remains uncertain. Update it when you learn more.</p>
+                </aside>
+                <div class="article-cat-end" aria-hidden="true"><span class="ink-cat cat-peek"></span></div>
+            </article>
+
+        </main>
+    </div>
+</body>
+</html>

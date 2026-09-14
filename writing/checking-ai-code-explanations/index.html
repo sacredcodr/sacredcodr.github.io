@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="Yogesh">
+    <meta name="description" content="A small example of the assumptions an AI explanation can hide.">
+    <meta property="og:title" content="Check the claim behind the explanation">
+    <meta property="og:description" content="A small example of the assumptions an AI explanation can hide.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://sacredcodr.github.io/writing/checking-ai-code-explanations/">
+    <link rel="canonical" href="https://sacredcodr.github.io/writing/checking-ai-code-explanations/">
+    <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="../../style.css?v=b7a844a58f18">
+    <title>Check the claim behind the explanation / sacred</title>
+</head>
+<body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <div class="page">
+        <header class="sidebar">
+            <a class="wordmark" href="../../" aria-label="sacred home">sacred<span>.</span></a>
+            <nav aria-label="Links">
+                <a href="../../"><span class="nav-label"><span class="nav-peek" aria-hidden="true"><span class="nav-peek-mover"><span class="nav-peek-art"></span></span></span>home</span></a>
+                <a class="current" href="../" aria-current="location"><span class="nav-label"><span class="nav-peek" aria-hidden="true"><span class="nav-peek-mover"><span class="nav-peek-art"></span></span></span>writing</span></a>
+                <a href="https://github.com/sacredcodr"><span class="nav-label"><span class="nav-peek" aria-hidden="true"><span class="nav-peek-mover"><span class="nav-peek-art"></span></span></span>github <span aria-hidden="true">↗</span></span></a>
+                <a href="https://www.linkedin.com/in/yogesh-pachl-2646543b8/"><span class="nav-label"><span class="nav-peek" aria-hidden="true"><span class="nav-peek-mover"><span class="nav-peek-art"></span></span></span>linkedin <span aria-hidden="true">↗</span></span></a>
+            </nav>
+        </header>
+        <main id="main" class="reading-page">
+            <article class="article">
+                <header>
+                    <a class="back-link" href="../">← all writing</a>
+                    <h1>Check the claim behind the explanation</h1>
+                    <div class="topic-tags" aria-label="Topics"><a class="topic-tag" href="../?tag=ai">AI</a><a class="topic-tag" href="../?tag=developer-tools">developer tools</a></div>
+                </header>
+                <p>An AI explanation can supply context that the code never gave it. NIST calls confidently presented false output <a href="https://nvlpubs.nist.gov/nistpubs/ai/NIST.AI.600-1.pdf#page=10">confabulation</a>. For code review, one useful question is: which part of the snippet supports this sentence?</p>
+                <figure class="error-comparison">
+                    <figcaption>Constructed example &middot; pseudocode</figcaption>
+                    <div class="error-version">
+                        <span class="example-label">Input</span>
+                        <code>if size == 0:<br>&nbsp;&nbsp;&nbsp;&nbsp;return 0<br>return total / size</code>
+                    </div>
+                    <div class="error-version error-version-useful">
+                        <span class="example-label">Hypothetical AI explanation</span>
+                        <p>This computes the average of the input values.</p>
+                    </div>
+                </figure>
+                <h2>Where does &ldquo;average&rdquo; come from?</h2>
+                <p>The division is visible. The collection of values isn't. Calling the result an average assumes that <code>total</code> is their sum and <code>size</code> is their count. Those names suggest that interpretation, but the snippet does not prove it.</p>
+                <dl class="error-details">
+                    <div><dt>Inputs</dt><dd>Check where <code>total</code> and <code>size</code> are assigned.</dd></div>
+                    <div><dt>Division</dt><dd>Check the numeric types. In C++, <code>5 / 2</code> is <code>2</code>: <a href="https://eel.is/c++draft/expr.mul#4">integer division discards the fractional part</a>. This pseudocode leaves the division rules unspecified.</dd></div>
+                    <div><dt>Zero case</dt><dd>If <code>size</code> is the count, returning zero for an empty collection is a fallback. An empty collection has no arithmetic mean.</dd></div>
+                </dl>
+                <h2>Ask for the missing context</h2>
+                <p>A focused follow-up would be: &ldquo;Which claims follow directly from this snippet, and which depend on its callers or types?&rdquo; Then check the answer against the code. An explanation of the evidence still needs review.</p>
+                <aside class="article-check">
+                    <h2>A narrower description</h2>
+                    <p>Returns zero when <code>size</code> is zero; otherwise divides <code>total</code> by <code>size</code>. Whether that represents an average depends on the inputs and division rules.</p>
+                </aside>
+                <p class="article-source">The example and explanation were written for this note, not collected from a model test. NIST, section 2.2, supports the general discussion of false output; it does not evaluate this example.</p>
+                <div class="article-cat-end" aria-hidden="true"><span class="ink-cat cat-peek"></span></div>
+            </article>
+
+        </main>
+    </div>
+</body>
+</html>
