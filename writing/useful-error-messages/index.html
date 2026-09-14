@@ -32,21 +32,31 @@
                     <h1>Give the error somewhere to go</h1>
                     <p class="article-meta">Developer tools</p>
                 </header>
-                <p>A tool stops with <code>Failed to open file</code>. Which file? Was the path wrong, or did the operating system refuse access? The next few minutes depend on information the tool has left out.</p>
-                <p>Even for someone comfortable with a debugger, a useful error should be readable without opening one.</p>
-                <h2>Keep the context</h2>
-                <p>Consider a hypothetical command-line tool that reads a configuration file. Its first attempt at an error message might be:</p>
-                <p><code>Could not load configuration.</code></p>
-                <p>If the file wasn't found, a more useful version could say:</p>
-                <p><code>Could not open C:/work/tool/settings.json: file not found. Check the path supplied with --config.</code></p>
-                <p>The resolved path matters. A relative path such as <code>settings.json</code> leaves the reader guessing which directory the tool used. Naming the failed operation also distinguishes opening the file from reading or parsing its contents.</p>
-                <h2>Don't guess the cause</h2>
-                <p>A failed open does not always mean a missing file. Report the cause available from the underlying operation. If access was denied, preserve that detail. If the tool cannot identify the cause, say so rather than suggesting a fix for a different failure.</p>
-                <p>The suggested next step should follow from that evidence. Asking someone to check a path makes sense for a missing file. Asking them to reinstall the application gives them a much larger job without explaining why it would help.</p>
-                <h2>What can the reader do next?</h2>
-                <p>A configuration parser can often point to a line and name the value it expected. An unsupported format can identify the formats the tool accepts. An internal failure may need a diagnostic log and a way to report the problem instead.</p>
-                <p>Keep the first message short enough to read while working. Longer diagnostic details can live in a log or an expandable section. Before asking someone to share that log, check whether it contains private paths, configuration values, or credentials.</p>
-                <p>During review, deliberately try a missing input file and a malformed configuration. Read only the output the user would see. Can you tell where the operation stopped and choose a reasonable next step? If you need the source code to answer, the message is missing context.</p>
+                <p>A tool stops with <code>Failed to open file</code>. Which file? Was the path wrong, or was access denied? The message leaves you to investigate something the tool could have explained.</p>
+                <figure class="error-comparison">
+                    <figcaption>Example: a missing configuration file</figcaption>
+                    <div class="error-version">
+                        <span class="example-label">Too little context</span>
+                        <code>Could not load configuration.</code>
+                    </div>
+                    <div class="error-version error-version-useful">
+                        <span class="example-label">Something to work with</span>
+                        <code>Could not open C:/work/tool/settings.json:<br>file not found.</code>
+                        <p>Check the path supplied with <code>--config</code>.</p>
+                    </div>
+                </figure>
+                <h2>Keep the useful details</h2>
+                <dl class="error-details">
+                    <div><dt>Where</dt><dd>The resolved path tells the reader which file the tool tried to open.</dd></div>
+                    <div><dt>Why</dt><dd>Preserve the reported cause. A missing file and denied access need different responses.</dd></div>
+                    <div><dt>What next</dt><dd>Suggest an action supported by that cause. If you don't know what failed, say so.</dd></div>
+                </dl>
+                <h2>Leave room for diagnosis</h2>
+                <p>Keep the first message readable. Put longer diagnostics in a log or an expandable section. Before asking someone to share a log, check for private paths, configuration values, and credentials.</p>
+                <aside class="article-check">
+                    <h2>A quick check</h2>
+                    <p>Try a missing file and a malformed configuration. Read only the output: can you tell where the operation stopped and choose a next step without opening the source?</p>
+                </aside>
                 <p class="article-source">Further reading: <a href="https://learn.microsoft.com/en-us/windows/win32/uxguide/mess-error">Microsoft's error-message design guidance</a>. This is a Windows 7-era guide; its discussion of clear, specific messages is useful beyond those interface examples.</p>
                 <div class="article-cat-end" aria-hidden="true"><span class="ink-cat cat-peek"></span></div>
             </article>
