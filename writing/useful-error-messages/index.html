@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Writing useful error messages for developer tools, with a worked example.">
+    <meta property="og:title" content="Give the error somewhere to go">
+    <meta property="og:description" content="Useful context, honest causes, and a next step.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://sacredcodr.github.io/writing/useful-error-messages/">
+    <link rel="canonical" href="https://sacredcodr.github.io/writing/useful-error-messages/">
+    <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="../../style.css?v=20260914">
+    <title>Give the error somewhere to go / sacred</title>
+</head>
+<body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <div class="page">
+        <header class="sidebar">
+            <a class="wordmark" href="../../" aria-label="sacred home">sacred<span>.</span></a>
+            <nav aria-label="Links">
+                <a href="../../"><span class="nav-label"><span class="nav-peek" aria-hidden="true"><span class="nav-peek-mover"><span class="nav-peek-art"></span></span></span>home</span></a>
+                <a class="current" href="../" aria-current="location"><span class="nav-label"><span class="nav-peek" aria-hidden="true"><span class="nav-peek-mover"><span class="nav-peek-art"></span></span></span>writing</span></a>
+                <a href="https://github.com/sacredcodr"><span class="nav-label"><span class="nav-peek" aria-hidden="true"><span class="nav-peek-mover"><span class="nav-peek-art"></span></span></span>github <span aria-hidden="true">↗</span></span></a>
+                <a href="https://www.linkedin.com/in/yogesh-pachl-2646543b8/"><span class="nav-label"><span class="nav-peek" aria-hidden="true"><span class="nav-peek-mover"><span class="nav-peek-art"></span></span></span>linkedin <span aria-hidden="true">↗</span></span></a>
+            </nav>
+        </header>
+        <main id="main" class="reading-page">
+            <article class="article">
+                <header>
+                    <a class="back-link" href="../">← all writing</a>
+                    <h1>Give the error somewhere to go</h1>
+                    <p class="article-meta">Developer tools</p>
+                </header>
+                <p>A tool stops with <code>Failed to open file</code>. Which file? Was the path wrong, or did the operating system refuse access? The next few minutes depend on information the tool has left out.</p>
+                <p>Even for someone comfortable with a debugger, a useful error should be readable without opening one.</p>
+                <h2>Keep the context</h2>
+                <p>Consider a hypothetical command-line tool that reads a configuration file. Its first attempt at an error message might be:</p>
+                <p><code>Could not load configuration.</code></p>
+                <p>If the file wasn't found, a more useful version could say:</p>
+                <p><code>Could not open C:/work/tool/settings.json: file not found. Check the path supplied with --config.</code></p>
+                <p>The resolved path matters. A relative path such as <code>settings.json</code> leaves the reader guessing which directory the tool used. Naming the failed operation also distinguishes opening the file from reading or parsing its contents.</p>
+                <h2>Don't guess the cause</h2>
+                <p>A failed open does not always mean a missing file. Report the cause available from the underlying operation. If access was denied, preserve that detail. If the tool cannot identify the cause, say so rather than suggesting a fix for a different failure.</p>
+                <p>The suggested next step should follow from that evidence. Asking someone to check a path makes sense for a missing file. Asking them to reinstall the application gives them a much larger job without explaining why it would help.</p>
+                <h2>What can the reader do next?</h2>
+                <p>A configuration parser can often point to a line and name the value it expected. An unsupported format can identify the formats the tool accepts. An internal failure may need a diagnostic log and a way to report the problem instead.</p>
+                <p>Keep the first message short enough to read while working. Longer diagnostic details can live in a log or an expandable section. Before asking someone to share that log, check whether it contains private paths, configuration values, or credentials.</p>
+                <p>During review, deliberately try a missing input file and a malformed configuration. Read only the output the user would see. Can you tell where the operation stopped and choose a reasonable next step? If you need the source code to answer, the message is missing context.</p>
+                <p class="article-source">Further reading: <a href="https://learn.microsoft.com/en-us/windows/win32/uxguide/mess-error">Microsoft's error-message design guidance</a>. This is a Windows 7-era guide; its discussion of clear, specific messages is useful beyond those interface examples.</p>
+                <div class="article-cat-end" aria-hidden="true"><span class="ink-cat cat-peek"></span></div>
+            </article>
+
+        </main>
+    </div>
+</body>
+</html>
