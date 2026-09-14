@@ -245,3 +245,21 @@ nav a:nth-child(3) { margin-left: 0; }
 .article-check { margin-top:28px; padding:4px 0 4px 20px; border-left:2px solid #727b77; }
 .article .article-check h2 { margin:0 0 8px; font-size:14px; }
 .article .article-check p { margin:0; font-size:14px; }
+
+/* Topics are links; archive filters are buttons with explicit selection. */
+.writing-entry { padding:20px 0; border-top:1px solid var(--line); }
+.writing-entry[hidden], .topic-filters[hidden] { display:none; }
+.writing .writing-entry .post-link, .writing-index .writing-entry .post-link { padding:0; border:0; }
+.topic-tags { display:flex; flex-wrap:wrap; gap:7px; margin-top:12px; }
+.topic-tag { display:inline-flex; align-items:center; min-height:26px; padding:3px 8px; border:1px solid #343b3e; border-radius:4px; font:11px/1.5 Consolas, monospace; text-decoration:none; color:#aab1b5; }
+.topic-tag:hover { border-color:#7f8b85; background:#1b2020; }
+.article header .topic-tags { margin-top:16px; }
+.topic-filters { display:flex; flex-wrap:wrap; gap:8px; margin-top:28px; }
+.topic-filters button { display:inline-flex; align-items:center; gap:9px; min-height:36px; padding:7px 11px; border:1px solid var(--line); border-radius:4px; font:12px/1.5 "Segoe UI", Arial, sans-serif; color:var(--muted); background:transparent; cursor:pointer; }
+.topic-filters button span { color:var(--muted); font:10px Consolas, monospace; }
+.topic-filters button[aria-pressed="true"] { color:#e0e5e2; border-color:#7f8b85; background:#202725; }
+.topic-filters button:hover { border-color:#7f8b85; color:var(--ink); }
+.topic-filters button:focus-visible { outline:2px solid var(--accent); outline-offset:3px; }
+.filter-status { font:11px/1.5 Consolas, monospace; color:var(--muted); margin:20px 0 0; }
+.writing-index .cat-post-list { margin-top:74px; }
+.writing-index .writing-entry:first-of-type { border-top:0; }

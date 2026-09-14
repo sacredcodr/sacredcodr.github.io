@@ -6,7 +6,7 @@
     <meta name="description" content="Technical notes by yugi on native software, C++, and binary analysis.">
     <link rel="canonical" href="https://sacredcodr.github.io/writing/">
     <link rel="icon" href="../favicon.svg" type="image/svg+xml">
-    <link rel="stylesheet" href="../style.css?v=fadcf411d436">
+    <link rel="stylesheet" href="../style.css?v=b7a844a58f18">
     <title>writing / sacred</title>
 </head>
 <body>
@@ -24,21 +24,33 @@
         <main id="main" class="reading-page writing-index">
             <h1>writing</h1>
             <p class="page-description">short notes on native software and binary analysis.</p>
+            <div class="topic-filters" role="group" aria-label="Filter writing by topic" hidden>
+                <button type="button" data-topic="all" aria-pressed="true">all <span>2</span></button>
+                <button type="button" data-topic="developer-tools" aria-pressed="false">developer tools <span>1</span></button>
+                <button type="button" data-topic="windows" aria-pressed="false">windows <span>1</span></button>
+                <button type="button" data-topic="binary-formats" aria-pressed="false">binary formats <span>1</span></button>
+            </div>
+            <p class="filter-status" role="status" aria-live="polite"></p>
             <div class="post-list cat-post-list">
                 <span class="ink-cat cat-sleep writing-divider-cat" aria-hidden="true"></span>
-                <a class="post-link" href="./useful-error-messages/">
-                    <span class="post-date">Developer tools</span>
-                    <span class="post-copy"><strong>Give the error somewhere to go</strong><span class="post-summary">Useful context, honest causes, and a next step.</span></span>
-                    <span class="post-arrow" aria-hidden="true">&rarr;</span>
-                </a>
-                <a class="post-link" href="./file-offsets-and-rvas/">
-                    <span class="post-date">Windows / PE</span>
-                    <span><strong>File offsets vs. memory addresses</strong><span class="post-summary">Understanding file offsets, RVAs, and virtual addresses.</span></span>
-                    <span class="post-arrow" aria-hidden="true">&rarr;</span>
-                </a>
+                <article class="writing-entry" data-tags="developer-tools">
+                    <a class="post-link" href="./useful-error-messages/">
+                        <span class="post-copy"><strong>Give the error somewhere to go</strong><span class="post-summary">Useful context, honest causes, and a next step.</span></span>
+                        <span class="post-arrow" aria-hidden="true">&rarr;</span>
+                    </a>
+                    <div class="topic-tags" aria-label="Topics"><a class="topic-tag" href="./?tag=developer-tools">developer tools</a></div>
+                </article>
+                <article class="writing-entry" data-tags="windows binary-formats">
+                    <a class="post-link" href="./file-offsets-and-rvas/">
+                        <span class="post-copy"><strong>File offsets vs. memory addresses</strong><span class="post-summary">Understanding file offsets, RVAs, and virtual addresses.</span></span>
+                        <span class="post-arrow" aria-hidden="true">&rarr;</span>
+                    </a>
+                    <div class="topic-tags" aria-label="Topics"><a class="topic-tag" href="./?tag=windows">windows</a><a class="topic-tag" href="./?tag=binary-formats">binary formats</a></div>
+                </article>
             </div>
 
         </main>
     </div>
+    <script src="./topics.js" defer></script>
 </body>
 </html>
