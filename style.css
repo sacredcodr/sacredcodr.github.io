@@ -280,3 +280,21 @@ nav a:nth-child(3) { margin-left: 0; }
 .dev-note[open] summary { padding-bottom: 0; }
 .dev-note p { color: var(--muted); }
 .dev-note a { color: var(--ink); }
+
+.code-sample { margin: 22px 0; padding: 18px 20px; background: #181b1d; border: 1px solid var(--line); overflow-x: auto; font: 13px/1.7 Consolas, monospace; tab-size: 4; }
+.article .code-sample code { font: inherit; white-space: pre; }
+.article-table-wrap { overflow-x: auto; margin: 24px 0; }
+.article-table { border-collapse: collapse; width: 100%; text-align: left; font-size: 14px; }
+.article-table th, .article-table td { padding: 12px 14px; border-bottom: 1px solid var(--line); }
+.article-table th { font-weight: 500; color: var(--muted); }
+
+.code-figure { margin: 24px 0; border: 1px solid var(--line); background: #181b1d; border-radius: 5px; overflow: hidden; }
+.code-figure figcaption { padding: 10px 20px; border-bottom: 1px solid var(--line); color: #a9b3bb; font: 11px/1.5 Consolas, monospace; }
+.code-figure .code-sample { margin: 0; border: 0; }
+.syntax-keyword, .syntax-instruction { color: #c6b1ec; }
+.syntax-type { color: #90c8d4; }
+.syntax-function { color: #b3d6b1; }
+.syntax-number { color: #e4bd8b; }
+.syntax-register { color: #a7c7ed; }
+.syntax-comment { color: #98a5ad; font-style: italic; }
+.syntax-option { color: #90c8d4; }

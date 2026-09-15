@@ -4,14 +4,14 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="author" content="Yogesh">
-    <meta name="description" content="Readable code, missing context, and the names we add ourselves.">
+    <meta name="description" content="A compiled example of signedness, optimization, and the assumptions behind readable pseudocode.">
     <meta property="og:title" content="What a decompiler can actually tell you">
-    <meta property="og:description" content="Readable code, missing context, and the names we add ourselves.">
+    <meta property="og:description" content="A compiled example of signedness, optimization, and the assumptions behind readable pseudocode.">
     <meta property="og:type" content="article">
     <meta property="og:url" content="https://sacredcodr.github.io/writing/reading-decompiler-output/">
     <link rel="canonical" href="https://sacredcodr.github.io/writing/reading-decompiler-output/">
     <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
-    <link rel="stylesheet" href="../../style.css?v=project-journal-2">
+    <link rel="stylesheet" href="../../style.css?v=syntax-1">
     <title>What a decompiler can actually tell you / sacred</title>
 </head>
 <body>
@@ -34,32 +34,70 @@
                     <h1>What a decompiler can actually tell you</h1>
                     <div class="topic-tags" aria-label="Topics"><a class="topic-tag" href="../?tag=reverse-engineering">reverse engineering</a></div>
                 </header>
-                <p>A decompiler gives you a readable reconstruction of a compiled program. It does not necessarily give you the source the author wrote. Comments, abstractions, and other source-level details can be missing, as <a href="https://hex-rays.com/blog/return-to-the-sources">Hex-Rays explains</a>.</p>
-                <figure class="error-comparison">
-                    <figcaption>Native code: a simplified view</figcaption>
-                    <div class="error-version">
-                        <span class="example-label">Compilation</span>
-                        <code>Source code &rarr; machine code</code>
-                    </div>
-                    <div class="error-version error-version-useful">
-                        <span class="example-label">Decompilation</span>
-                        <code>Machine code &rarr; reconstructed pseudocode</code>
-                    </div>
-                </figure>
-                <p>Some names and types may still be available through debug symbols. <a href="https://learn.microsoft.com/en-us/windows-hardware/drivers/debugger/symbols">Microsoft's symbol documentation</a> describes that information. A name you add during analysis has a different origin: it records your interpretation.</p>
-                <h2>Take a name like <code>itemCount</code></h2>
-                <p>Suppose a value is compared with a loop counter to decide when the loop stops. Renaming it <code>itemCount</code> suggests a purpose that the comparison alone does not establish.</p>
-                <dl class="error-details">
-                    <div><dt>Observed</dt><dd>The value is used in the loop's stopping condition.</dd></div>
-                    <div><dt>Possible</dt><dd>It is a number of items, a capacity, or another limit.</dd></div>
-                    <div><dt>To check</dt><dd>Where the value comes from and how the loop uses it.</dd></div>
-                </dl>
-                <p>This is an illustrative example. The point is to keep a useful guess from becoming an undocumented assumption.</p>
+                <p>A decompiler can recover a useful description of a function's behaviour without recovering the source that produced it. The distinction becomes clearer with a small example: a function that caps an unsigned value at seven.</p>
+                <h2>Start with something we can check</h2>
+                <figure class="code-figure"><figcaption>C / original source</figcaption><pre class="code-sample"><code><span class="syntax-type">unsigned</span> <span class="syntax-function">cap_unsigned</span>(<span class="syntax-type">unsigned</span> value)
+{
+    <span class="syntax-keyword">if</span> (value &gt; <span class="syntax-number">7</span>)
+    {
+        <span class="syntax-keyword">return</span> <span class="syntax-number">7</span>;
+    }
+    <span class="syntax-keyword">return</span> value;
+}</code></pre></figure>
+                <p>This example was compiled with Ubuntu Clang 18.1.3 for <code>x86_64-pc-linux-gnu</code>, using <code>-O2</code>. The following is the compiler's emitted Intel-syntax assembly, with directives and comments omitted. It is not a decompiler capture.</p>
+                <figure class="code-figure"><figcaption>x86-64 / Clang -O2</figcaption><pre class="code-sample"><code><span class="syntax-function">cap_unsigned</span>:
+    <span class="syntax-instruction">cmp</span>   <span class="syntax-register">edi</span>, <span class="syntax-number">7</span>
+    <span class="syntax-instruction">mov</span>   <span class="syntax-register">eax</span>, <span class="syntax-number">7</span>
+    <span class="syntax-instruction">cmovb</span> <span class="syntax-register">eax</span>, <span class="syntax-register">edi</span>
+    <span class="syntax-instruction">ret</span></code></pre></figure>
+                <p>Under this target's calling convention, the argument arrives in <code>edi</code> and the result is returned in <code>eax</code>. These register assignments are specific to this example's ABI; don't carry them over to Windows x64 without checking.</p>
+                <h2>Read the operation before naming its purpose</h2>
+                <p><code>cmp edi, 7</code> sets flags as though subtracting seven from the input. <code>mov eax, 7</code> prepares the default result without changing those flags. Then <code>cmovb</code> copies the input into the result if the comparison was unsigned-below. Otherwise, seven stays in <code>eax</code>.</p>
+                <p>At exactly seven, the move isn't taken, but the result is still seven. That is why this sequence matches the source even though its condition is phrased differently.</p>
+                <figure class="code-figure"><figcaption>C / manual reconstruction</figcaption><pre class="code-sample"><code><span class="syntax-comment">// Manual C-like reconstruction, not tool output.</span>
+<span class="syntax-type">unsigned</span> <span class="syntax-function">f</span>(<span class="syntax-type">unsigned</span> x)
+{
+    <span class="syntax-keyword">return</span> x &lt; <span class="syntax-number">7u</span> ? x : <span class="syntax-number">7u</span>;
+}</code></pre></figure>
+                <p>This reconstruction explains the instructions. It cannot establish whether the original author used an <code>if</code>, a conditional expression, or an inlined helper. A decompiler's choice of one readable form is not evidence that the author chose the same form. Hex-Rays describes this distinction in <a href="https://hex-rays.com/blog/return-to-the-sources">Return to the sources?</a>.</p>
+                <h2>One letter changes the interpretation</h2>
+                <p>Now change the parameter and return type to <code>int</code>, leaving the body unchanged. In this build, the optimized instructions are identical except for <code>cmovl</code> in place of <code>cmovb</code>.</p>
+                <figure class="code-figure"><figcaption>x86-64 / compare conditions</figcaption><pre class="code-sample"><code><span class="syntax-comment">// Unsigned comparison       Signed comparison</span>
+<span class="syntax-instruction">cmovb</span> <span class="syntax-register">eax</span>, <span class="syntax-register">edi</span>              <span class="syntax-instruction">cmovl</span> <span class="syntax-register">eax</span>, <span class="syntax-register">edi</span></code></pre></figure>
+                <p><code>cmovb</code> tests the carry flag for unsigned-below. <code>cmovl</code> tests whether the sign and overflow flags differ, the signed-less condition. The preceding <code>cmp</code> itself does not declare a signed type; the condition consuming its flags supplies the distinction here.</p>
+                <div class="article-table-wrap" tabindex="0" role="region" aria-label="Signed and unsigned results">
+                    <table class="article-table">
+                        <thead><tr><th>Input bits</th><th>Unsigned function</th><th>Signed function</th></tr></thead>
+                        <tbody>
+                            <tr><td><code>0x00000005</code></td><td>5</td><td>5</td></tr>
+                            <tr><td><code>0x00000008</code></td><td>7</td><td>7</td></tr>
+                            <tr><td><code>0xffffffff</code></td><td>7</td><td>&minus;1</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>The last row is the useful boundary case. On this target, those bits represent 4,294,967,295 as an unsigned 32-bit value and &minus;1 as a signed 32-bit value. A reconstruction that uses a signed comparison for the unsigned function would give the wrong result there.</p>
+                <p>That gives us evidence for the comparison's semantics. It still doesn't recover the original type spelling: a typedef or an explicit cast could produce the same operation. Check the caller and other uses before treating a decompiler's inferred parameter type as settled.</p>
+                <h2>Optimization changes the shape you see</h2>
+                <p>At <code>-O0</code>, this same compiler stores values in stack slots and emits a conditional jump, <code>jbe</code>. At <code>-O2</code>, the function above has no conditional jump and no stack frame. A conditional move selects the result instead.</p>
+                <p>An <code>if</code> in decompiled output therefore needn't correspond to a branch instruction. Likewise, stack temporaries in an unoptimized build needn't each represent a separate variable the author named. The compiler's storage decisions and the decompiler's reconstructed variables are two additional layers between the reader and the source.</p>
+                <h2>What would justify a better name?</h2>
+                <p><code>capUnsignedAtSeven</code> describes the observed operation. <code>limitRetryCount</code> adds a claim about the application's purpose. Nothing in these four instructions establishes that the value counts retries.</p>
+                <p>To support that name, follow the argument back to its caller: where is it produced, and what uses the returned value? A loop bound, an allocation size, and a displayed setting can all pass through the same arithmetic. Keep the descriptive name until that surrounding behaviour supports a more specific one.</p>
                 <aside class="article-check">
-                    <h2>Keep the reason with the name</h2>
-                    <p><code>Possible item count; caller not checked.</code></p>
-                    <p>A note like this tells the next reader what remains uncertain. Update it when you learn more.</p>
+                    <h2>A useful analysis note</h2>
+                    <p><code>Unsigned 32-bit cap at 7. Confirmed from CMP/CMOVB. Meaning of input not established; inspect callers.</code></p>
+                    <p>The note separates an instruction-level conclusion from the question still open. That makes it easier to revise the name without throwing away what was actually verified.</p>
                 </aside>
+                <details class="dev-note">
+                    <summary>Reproduce the example</summary>
+                    <p>Download <a href="./example/cap.c">cap.c</a>, containing both versions. With Clang 18.1.3 on x86-64 Linux:</p>
+                    <figure class="code-figure"><figcaption>Shell / reproduce</figcaption><pre class="code-sample"><code><span class="syntax-function">clang</span> <span class="syntax-option">-O2</span> <span class="syntax-option">-S</span> <span class="syntax-option">-masm=intel</span> \
+  <span class="syntax-option">-fno-asynchronous-unwind-tables</span> cap.c <span class="syntax-option">-o</span> cap<span class="syntax-option">-O2</span>.s
+<span class="syntax-function">clang</span> <span class="syntax-option">-O0</span> <span class="syntax-option">-S</span> <span class="syntax-option">-masm=intel</span> \
+  <span class="syntax-option">-fno-asynchronous-unwind-tables</span> cap.c <span class="syntax-option">-o</span> cap<span class="syntax-option">-O0</span>.s</code></pre></figure>
+                    <p>The captured <a href="./example/cap-O2.s">optimized assembly</a> and <a href="./example/cap-O0.s">unoptimized assembly</a> are included. Other compiler versions and targets may produce different instructions.</p>
+                    <p>This is a controlled source-to-assembly experiment. A follow-up with captured output from a named decompiler would show its particular type inference and formatting decisions; the manual reconstruction above makes no claim about those.</p>
+                </details>
                 <div class="article-cat-end" aria-hidden="true"><span class="ink-cat cat-peek"></span></div>
             </article>
 
