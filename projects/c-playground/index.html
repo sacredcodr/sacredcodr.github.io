@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="Yogesh">
+    <meta name="description" content="Notes on software Yogesh is building.">
+    <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="../../style.css?v=project-journal-2">
+    <title>C playground / sacred</title>
+</head>
+<body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <div class="page">
+        <header class="sidebar cat-header">
+            <a class="wordmark" href="../../" aria-label="sacred home">sacred<span>.</span></a>
+            <nav aria-label="Links">
+                <a href="../../"><span class="nav-label"><span class="nav-peek" aria-hidden="true"><span class="nav-peek-mover"><span class="nav-peek-art"></span></span></span>home</span></a>
+                <a href="../../writing/"><span class="nav-label"><span class="nav-peek" aria-hidden="true"><span class="nav-peek-mover"><span class="nav-peek-art"></span></span></span>writing</span></a>
+                <a class="current" href="../" aria-current="true"><span class="nav-label"><span class="nav-peek" aria-hidden="true"><span class="nav-peek-mover"><span class="nav-peek-art"></span></span></span>projects</span></a>
+                <a href="https://github.com/sacredcodr"><span class="nav-label"><span class="nav-peek" aria-hidden="true"><span class="nav-peek-mover"><span class="nav-peek-art"></span></span></span>github <span aria-hidden="true">↗</span></span></a>
+                <a href="https://www.linkedin.com/in/yogesh-pachl-2646543b8/"><span class="nav-label"><span class="nav-peek" aria-hidden="true"><span class="nav-peek-mover"><span class="nav-peek-art"></span></span></span>linkedin <span aria-hidden="true">↗</span></span></a>
+            </nav>
+        </header>
+        <main id="main" class="reading-page article project-notes">
+            <a class="back-link" href="../">&larr; all projects</a>
+            <h1>C playground</h1>
+            <section class="project-note" aria-label="Development journal">
+                <p class="article-meta">early development &middot; notes updated 15 September 2026</p>
+                <p>A C++ desktop playground for experimenting with small C programs, built around <a href="https://github.com/foonathan/clauf">Jonathan M&uuml;ller's clauf</a>. The aim is to keep the source, diagnostics, and compiler output close together so runtime errors are easier to investigate.</p>
+                <p>The design and scope are still taking shape. The <a href="https://github.com/sacredcodr/clauf-playground">GitHub repository</a> has a short project introduction; source code and downloads will come later.</p>
+                <h3>reading through clauf</h3>
+                <p>These are the parts of the codebase that connect most directly to the app. Expand a note for the source and the design question it raises.</p>
+                <details class="dev-note">
+                    <summary>Inspecting a program doesn't have to run it</summary>
+                    <p>In <a href="https://github.com/foonathan/clauf/blob/25b91226c1e8193c4498149cbedf69c2068458da/src/main.cpp#L46-L89">main.cpp</a>, clauf can dump the AST and lauf bytecode before the branch that executes <code>main</code>. Execution is skipped with <code>--compile-only</code>.</p>
+                    <p>That distinction is useful for a playground: inspecting an endless loop should not start it. It gives the interface a reason to separate running code from looking at its compiled form.</p>
+                    <p>The next UI question is how much of a dump to show at once. A raw dump is useful as a reference, but it still leaves the reader to connect it to the source.</p>
+                </details>
+                <details class="dev-note">
+                    <summary>There are source locations to build on</summary>
+                    <p>The statement visitor in <a href="https://github.com/foonathan/clauf/blob/25b91226c1e8193c4498149cbedf69c2068458da/src/codegen.cpp#L1424-L1437">codegen.cpp</a> records a line and column with <code>lauf_asm_build_debug_location</code>. That gives the generated instructions a connection back to the C source.</p>
+                    <p>A small next experiment: make a diagnostic location clickable and select the corresponding line in the editor. First, check what locations survive in the actual error output, including multiline statements and more than one statement on a line.</p>
+                    <p>This doesn't establish that a stepping debugger is ready to wire up. That would need a separate look at lauf's execution APIs.</p>
+                </details>
+                <details class="dev-note">
+                    <summary>A VM doesn't settle the isolation question</summary>
+                    <p>Clauf's <a href="https://github.com/foonathan/clauf/blob/25b91226c1e8193c4498149cbedf69c2068458da/src/codegen.cpp#L1581-L1595">host-function lookup</a> uses <code>dlsym</code>, and its <a href="https://github.com/foonathan/clauf/blob/25b91226c1e8193c4498149cbedf69c2068458da/src/codegen.cpp#L274-L290">call path</a> uses libffi. The interpreter can interact with native host functions.</p>
+                    <p>The scope is trusted local snippets. Separating the editor from the engine and limiting execution are useful precautions, but they do not make this a sandbox for arbitrary uploaded code.</p>
+                </details>
+                <h3>next experiment</h3>
+                <p>Start with jumping from an error to its source line. Keep the original diagnostic visible so the extra UI can be checked against what clauf actually reported. Syntax highlighting can follow; stepping is still exploratory.</p>
+                <p class="article-source">Code observations refer to clauf revision <code>25b9122</code>. The interface ideas above are directions to explore; this project is not a finished release.</p>
+            </section>
+        </main>
+    </div>
+</body>
+</html>

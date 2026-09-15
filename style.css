@@ -263,3 +263,20 @@ nav a:nth-child(3) { margin-left: 0; }
 .filter-status { font:11px/1.5 Consolas, monospace; color:var(--muted); margin:20px 0 0; }
 .writing-index .cat-post-list { margin-top:74px; }
 .writing-index .writing-entry:first-of-type { border-top:0; }
+
+/* Short development notes, before a project is ready for a full page. */
+.project-note { margin-top: 38px; padding-top: 24px; border-top: 1px solid var(--line); }
+.project-notes .project-note h2 { margin-top: 12px; font-size: 23px; }
+.project-note h3 { margin: 26px 0 8px; font-size: 13px; font-weight: 500; color: var(--muted); }
+.project-note h3 + p { margin-top: 0; }
+.project-next { color: var(--muted); }
+
+.dev-note { border-bottom: 1px solid var(--line); }
+.dev-note:first-of-type { margin-top: 20px; border-top: 1px solid var(--line); }
+.dev-note summary { padding: 18px 0; cursor: pointer; font-size: 15px; line-height: 1.6; }
+.dev-note summary:hover { color: #eef0ef; }
+.dev-note summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+.dev-note[open] { padding-bottom: 22px; }
+.dev-note[open] summary { padding-bottom: 0; }
+.dev-note p { color: var(--muted); }
+.dev-note a { color: var(--ink); }
