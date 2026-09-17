@@ -48,7 +48,7 @@ async function startCatFlow() {
         }
         return { left, right };
     });
-    const position = { x: 0, y: 144 };
+    const position = { x: 0, y: 0 };
     let width = 0;
     let height = 0;
     let frame = 0;
@@ -125,7 +125,7 @@ async function startCatFlow() {
     function resize() {
         const nextWidth = area.clientWidth;
         if (!nextWidth || nextWidth === width) return;
-        const fraction = width ? position.x / Math.max(1, width - catSize) : 1;
+        const fraction = width ? position.x / Math.max(1, width - catSize) : 0;
         width = nextWidth;
         measureBlocks();
         height = prepared.reduce((sum, block) => sum + layoutWithLines(block.text, width, block.lineHeight).height + block.gap, 0) + 24;
@@ -153,8 +153,8 @@ async function startCatFlow() {
     handle.addEventListener('pointercancel', endDrag);
     handle.addEventListener('lostpointercapture', endDrag);
     function resetPosition() {
-        position.x = width - catSize;
-        position.y = 144;
+        position.x = 0;
+        position.y = 0;
         schedule();
     }
     reset.addEventListener('click', resetPosition);
