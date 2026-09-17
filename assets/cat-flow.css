@@ -1,0 +1,25 @@
+.cat-flow { position: relative; }
+.cat-flow-original p:first-child { margin-top: 0; }
+.cat-flow-lines { display: none; }
+.cat-flow-ready .cat-flow-original {
+    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+    overflow: hidden; clip-path: inset(50%); white-space: nowrap;
+}
+.cat-flow-ready .cat-flow-lines { display: block; }
+.cat-flow-line { position: absolute; font: 15px/1.9 "Segoe UI", Arial, sans-serif; white-space: pre; }
+.cat-flow-line.muted { color: var(--muted); }
+.cat-flow-handle {
+    position: absolute; top: 0; left: 0; width: 104px; height: 104px;
+    padding: 0; border: 0; background: transparent; cursor: grab;
+    touch-action: none; user-select: none; -webkit-user-select: none;
+}
+.cat-flow-handle .reference-cat { display: block; width: 104px; height: 104px; pointer-events: none; }
+.cat-flow-handle.dragging { cursor: grabbing; }
+.cat-flow-handle:focus-visible { outline: 1px dashed var(--muted); outline-offset: 5px; border-radius: 12px; }
+.cat-flow-tools { display: flex; align-items: baseline; gap: 12px; margin-top: 8px; color: var(--muted); font: 10px/1.6 Consolas, monospace; }
+.cat-flow-tools[hidden], .cat-flow-handle[hidden] { display: none; }
+.cat-flow-reset { color: inherit; background: none; border: 0; padding: 6px 0; font: inherit; text-decoration: underline; cursor: pointer; }
+.cat-flow-reset:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+@media (prefers-reduced-motion: reduce) {
+    .cat-flow-handle .cat-eye-overlay { animation: none; }
+}
