@@ -4,9 +4,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="author" content="Yogesh">
-    <meta name="description" content="Notes on software Yogesh is building.">
+    <meta name="description" content="Development notes for a native C playground: source navigation, syntax highlighting, clauf internals and current limitations.">
     <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
-    <link rel="stylesheet" href="../../style.css?v=project-journal-2">
+    <link rel="stylesheet" href="../../style.css?v=project-journal-3">
     <title>C playground / sacred</title>
 </head>
 <body>
@@ -26,32 +26,72 @@
             <a class="back-link" href="../">&larr; all projects</a>
             <h1>C playground</h1>
             <section class="project-note" aria-label="Development journal">
-                <p class="article-meta">early development &middot; notes updated 15 September 2026</p>
-                <p>A C++ desktop playground for experimenting with small C programs, built around <a href="https://github.com/foonathan/clauf">Jonathan M&uuml;ller's clauf</a>. The aim is to keep the source, diagnostics, and compiler output close together so runtime errors are easier to investigate.</p>
-                <p>The design and scope are still taking shape. The <a href="https://github.com/sacredcodr/clauf-playground">GitHub repository</a> has a short project introduction; source code and downloads will come later.</p>
-                <h3>reading through clauf</h3>
-                <p>These are the parts of the codebase that connect most directly to the app. Expand a note for the source and the design question it raises.</p>
+                <p class="article-meta">hobby project &middot; notes updated 17 September 2026</p>
+                <p>A for-fun C++ desktop playground for small C programs, built around <a href="https://github.com/foonathan/clauf">Jonathan M&uuml;ller's clauf</a>. The Windows interface keeps the source, runtime diagnostics, AST and bytecode together. The engine currently runs through Ubuntu WSL.</p>
+                <p>The edit, run and inspect loop works locally. The <a href="https://github.com/sacredcodr/clauf-playground">public repository</a> still contains only the project introduction; the local source and expanded README are being tidied up. This is an ongoing hobby project, with no completion target or planned executable downloads.</p>
+
+                <h3>working now</h3>
+                <ul>
+                    <li>C syntax colours and line numbers, with Open, Save, Save as and session restore.</li>
+                    <li>Run, AST and Bytecode actions, plus five small examples.</li>
+                    <li>A Go to line action for the first reported source location. Editing the source marks the result stale and disables the jump.</li>
+                </ul>
+
                 <details class="dev-note">
-                    <summary>Inspecting a program doesn't have to run it</summary>
-                    <p>In <a href="https://github.com/foonathan/clauf/blob/25b91226c1e8193c4498149cbedf69c2068458da/src/main.cpp#L46-L89">main.cpp</a>, clauf can dump the AST and lauf bytecode before the branch that executes <code>main</code>. Execution is skipped with <code>--compile-only</code>.</p>
-                    <p>That distinction is useful for a playground: inspecting an endless loop should not start it. It gives the interface a reason to separate running code from looking at its compiled form.</p>
-                    <p>The next UI question is how much of a dump to show at once. A raw dump is useful as a reference, but it still leaves the reader to connect it to the source.</p>
+                    <summary>See the current app</summary>
+                    <figure class="project-capture">
+                        <a href="playground.png"><img src="playground.png" width="1144" height="501" loading="lazy" alt="C playground showing a simple addition program and the result 42."></a>
+                        <figcaption>The First run example adds 20 and 22 and prints 42 using clauf's debug-print extension. Open the image for the full-size view.</figcaption>
+                    </figure>
+                    <p>The source has a larger font than the output. Run is a dark outlined button, with Ctrl+Enter beside it; AST and Bytecode stay above the result they produce.</p>
+                </details>
+
+                <h3>implementation notes</h3>
+                <details class="dev-note">
+                    <summary>Inspecting a program without running it</summary>
+                    <p>In clauf's <a href="https://github.com/foonathan/clauf/blob/25b91226c1e8193c4498149cbedf69c2068458da/src/main.cpp#L46-L89">main.cpp</a>, AST and lauf bytecode dumps happen before execution. Passing <code>--compile-only</code> skips running <code>main</code>.</p>
+                    <p>The app uses that path for AST and Bytecode, so inspecting an endless loop does not start it. Run keeps the engine's original output and adds short hints for division by zero and failed assertions.</p>
+                    <p>The dumps are still plain text. Connecting a selected source expression to the relevant part of a dump is a separate, unfinished problem.</p>
                 </details>
                 <details class="dev-note">
-                    <summary>There are source locations to build on</summary>
-                    <p>The statement visitor in <a href="https://github.com/foonathan/clauf/blob/25b91226c1e8193c4498149cbedf69c2068458da/src/codegen.cpp#L1424-L1437">codegen.cpp</a> records a line and column with <code>lauf_asm_build_debug_location</code>. That gives the generated instructions a connection back to the C source.</p>
-                    <p>A small next experiment: make a diagnostic location clickable and select the corresponding line in the editor. First, check what locations survive in the actual error output, including multiline statements and more than one statement on a line.</p>
-                    <p>This doesn't establish that a stepping debugger is ready to wire up. That would need a separate look at lauf's execution APIs.</p>
+                    <summary>A source location belongs to a particular run</summary>
+                    <p>The statement visitor in <a href="https://github.com/foonathan/clauf/blob/25b91226c1e8193c4498149cbedf69c2068458da/src/codegen.cpp#L1424-L1437">codegen.cpp</a> records a line and column with <code>lauf_asm_build_debug_location</code>. The runtime diagnostics expose locations such as <code>main.c:3:5</code>.</p>
+                    <p>Go to line selects the first reported source line. The location shows where the error surfaced; the cause may be elsewhere.</p>
+                    <p>Each result keeps a copy of the source that produced it. After an edit, the old line number may point somewhere else. The jump stays disabled until the source matches again or the program is run again.</p>
                 </details>
                 <details class="dev-note">
-                    <summary>A VM doesn't settle the isolation question</summary>
-                    <p>Clauf's <a href="https://github.com/foonathan/clauf/blob/25b91226c1e8193c4498149cbedf69c2068458da/src/codegen.cpp#L1581-L1595">host-function lookup</a> uses <code>dlsym</code>, and its <a href="https://github.com/foonathan/clauf/blob/25b91226c1e8193c4498149cbedf69c2068458da/src/codegen.cpp#L274-L290">call path</a> uses libffi. The interpreter can interact with native host functions.</p>
-                    <p>The scope is trusted local snippets. Separating the editor from the engine and limiting execution are useful precautions, but they do not make this a sandbox for arbitrary uploaded code.</p>
+                    <summary>Adding colour without breaking editing</summary>
+                    <p>A small C token scanner distinguishes keywords, numbers, strings, comments, function names and directive names. The colours are lexical: a highlighted construct is not a claim that clauf accepts it.</p>
+                    <p>Rich Edit text ranges apply the colours without changing the selection. Formatting waits 120 ms after an edit, suspends undo recording only while applying colours, then resumes it. This avoids turning a colour change into the next Undo action.</p>
+                    <p>The scanner also has to handle code while it is being typed: unfinished comments, escaped quotes and expressions that are not complete yet.</p>
                 </details>
-                <h3>next experiment</h3>
-                <p>Start with jumping from an error to its source line. Keep the original diagnostic visible so the extra UI can be checked against what clauf actually reported. Syntax highlighting can follow; stepping is still exploratory.</p>
-                <p class="article-source">Code observations refer to clauf revision <code>25b9122</code>. The interface ideas above are directions to explore; this project is not a finished release.</p>
+                <details class="dev-note">
+                    <summary>Files, sessions and keyboard use</summary>
+                    <p>Ctrl+S saves to the current file; a new snippet asks for a path. Ctrl+Shift+S opens Save as. Open and example replacement ask before discarding source that has not been saved to a file.</p>
+                    <p>The session copy is separate from a saved file. It is written on Run, inspection and normal close, then restored when the app reopens. A restored session has no associated file and is treated as unsaved.</p>
+                    <p>Ctrl+Enter runs, Ctrl+O opens a file, and Ctrl+Tab or Ctrl+Shift+Tab moves focus out of the editor.</p>
+                </details>
+                <details class="dev-note">
+                    <summary>Running code without freezing the editor</summary>
+                    <p>The C++20 frontend uses Win32 and Rich Edit. Clauf runs through WSL on a worker thread, so the editor stays responsive while the program runs. Its output appears beside the source.</p>
+                    <p>Long-running programs are stopped, memory use is limited, and output is capped so a noisy snippet does not fill the app. Temporary source files are removed after each run.</p>
+                </details>
+                <details class="dev-note">
+                    <summary>The engine is still experimental</summary>
+                    <p>Clauf is archived, supports only a subset of C, and has no preprocessor. The examples use <code>__clauf_print</code> and <code>__clauf_assert</code>; neither is a standard C library function.</p>
+                    <p>Its <a href="https://github.com/foonathan/clauf/blob/25b91226c1e8193c4498149cbedf69c2068458da/src/codegen.cpp#L1581-L1595">host-function lookup</a> uses <code>dlsym</code>, and its <a href="https://github.com/foonathan/clauf/blob/25b91226c1e8193c4498149cbedf69c2068458da/src/codegen.cpp#L274-L290">call path</a> uses libffi. Resource limits do not isolate that host access. The app is for trusted local experiments.</p>
+                    <p>The engine build is pinned to revision <code>25b9122</code>. Clang 18 needed an explicit <code>cstdarg</code> include and a format-warning compatibility flag for the archived dependency code. Clauf has not been ported to Windows.</p>
+                </details>
+                <h3>things to explore</h3>
+                <p>Structured diagnostics and ways to connect the source to an AST or bytecode dump could be interesting to try. There is no fixed roadmap or finished version to work towards; this is a place to experiment with C and clauf.</p>
+                <details class="dev-note">
+                    <summary>Building it locally</summary>
+                    <p>The Windows frontend uses CMake presets: <code>cmake --preset windows</code>, then <code>cmake --build --preset windows</code>. The same preset can be selected in Visual Studio.</p>
+                    <p>The clauf engine is a separate WSL dependency, built with <code>python build.py</code>. Building locally produces an executable for your own use; downloadable binaries are not planned.</p>
+                </details>
+                <p class="article-source">Upstream observations refer to clauf revision <code>25b9122</code>. These notes describe the local app as of 17 September 2026.</p>
             </section>
+            <div class="article-cat-end" aria-hidden="true"><span class="ink-cat cat-peek"></span></div>
         </main>
     </div>
 </body>
