@@ -1,0 +1,41 @@
+.projects-index { max-width: 820px; }
+.project-list { position: relative; margin-top: 88px; }
+.project-entry {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 310px);
+    align-items: center;
+    gap: 36px;
+    padding: 28px 0;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+}
+.project-entry + .project-entry { border-top: 0; }
+.project-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #b4c7db;
+    font: 11px/1.6 Consolas, monospace;
+}
+.project-status::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.project-status[data-status="finished"] { color: #b7cfbf; }
+.project-status[data-status="on-hold"] { color: #d1bea2; }
+.project-status[data-status="archived"] { color: var(--muted); }
+.project-status[data-status="archived"]::before { background: transparent; border: 1px solid currentColor; }
+.project-info h2 { margin: 10px 0 0; font-size: 23px; line-height: 1.4; font-weight: 500; color: var(--ink); letter-spacing: -.3px; }
+.project-info h2 a { text-decoration: none; }
+.project-info h2 a:hover { text-decoration: underline; }
+.project-description { margin-top: 12px; font-size: 14px; line-height: 1.8; color: var(--muted); }
+.project-stack { margin-top: 14px; font: 11px/1.7 Consolas, monospace; color: var(--muted); }
+.project-links { display: flex; flex-wrap: wrap; gap: 24px; margin-top: 22px; font-size: 12px; }
+.project-links a { padding: 5px 0; }
+.project-links span { margin-left: 5px; color: var(--muted); }
+.project-preview { display: block; border: 1px solid var(--line); }
+.project-preview:hover { border-color: #69777e; }
+.project-preview img { display: block; width: 100%; height: auto; }
+.project-note-status { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; }
+@media (max-width: 680px) {
+    .project-entry { grid-template-columns: minmax(0, 1fr); gap: 24px; }
+    .project-preview { max-width: 420px; }
+    .project-list { margin-top: 94px; }
+}

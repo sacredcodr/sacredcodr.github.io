@@ -7,6 +7,7 @@
     <meta name="description" content="Notes on software Yogesh is building.">
     <link rel="icon" href="../favicon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="../style.css?v=project-journal-2">
+    <link rel="stylesheet" href="../assets/projects.css?v=1">
     <title>projects / sacred</title>
 </head>
 <body>
@@ -22,17 +23,25 @@
                 <a href="https://www.linkedin.com/in/yogesh-pachl-2646543b8/"><span class="nav-label"><span class="nav-peek" aria-hidden="true"><span class="nav-peek-mover"><span class="nav-peek-art"></span></span></span>linkedin <span aria-hidden="true">↗</span></span></a>
             </nav>
         </header>
-        <main id="main" class="reading-page writing-index">
+        <main id="main" class="reading-page projects-index">
             <h1>projects</h1>
-            <p class="page-description">software i'm building.</p>
-            <div class="post-list cat-post-list">
+            <p class="page-description">small tools and things i'm trying out.</p>
+            <div class="project-list">
                 <span class="ink-cat cat-sleep writing-divider-cat" aria-hidden="true"></span>
-                <article class="writing-entry">
-                    <a class="post-link" href="./c-playground/">
-                        <span class="post-copy"><strong>C playground</strong><span class="post-summary">A native C playground with source navigation, syntax highlighting and clauf inspection.</span></span>
-                        <span class="post-arrow" aria-hidden="true">&rarr;</span>
+                <article class="project-entry" aria-labelledby="c-playground-title">
+                    <div class="project-info">
+                        <span class="project-status" data-status="in-development">In development</span>
+                        <h2 id="c-playground-title"><a href="./c-playground/">C playground</a></h2>
+                        <p class="project-description">Run small C programs and explore their diagnostics, AST and bytecode in a native Windows app.</p>
+                        <p class="project-stack">C++ &middot; Win32 &middot; clauf</p>
+                        <div class="project-links">
+                            <a href="./c-playground/">Project notes <span aria-hidden="true">&rarr;</span></a>
+                            <a href="https://github.com/sacredcodr/clauf-playground">Source <span aria-hidden="true">&nearr;</span></a>
+                        </div>
+                    </div>
+                    <a class="project-preview" href="./c-playground/" aria-label="View C playground">
+                        <img src="./c-playground/playground.png" width="1144" height="501" alt="C playground running an addition program with the result 42.">
                     </a>
-                    <p class="post-date">hobby project &middot; updated 17 September 2026</p>
                 </article>
             </div>
         </main>
