@@ -10,6 +10,7 @@
     border-bottom: 1px solid var(--line);
 }
 .project-entry + .project-entry { border-top: 0; }
+.project-entry--compact { grid-template-columns: minmax(0, 1fr); }
 .project-status {
     display: inline-flex;
     align-items: center;

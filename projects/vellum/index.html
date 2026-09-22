@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="Yogesh">
+    <meta name="description" content="Development notes for Vellum, a local Windows vault for notes and passwords.">
+    <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="../../style.css?v=project-journal-4">
+    <link rel="stylesheet" href="../../assets/projects.css?v=1">
+    <title>Vellum / sacred</title>
+</head>
+<body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <div class="page">
+        <header class="sidebar cat-header">
+            <a class="wordmark" href="../../" aria-label="sacred home">sacred<span>.</span></a>
+            <nav aria-label="Links">
+                <a href="../../"><span class="nav-label"><span class="nav-peek" aria-hidden="true"><span class="nav-peek-mover"><span class="nav-peek-art"></span></span></span>home</span></a>
+                <a href="../../writing/"><span class="nav-label"><span class="nav-peek" aria-hidden="true"><span class="nav-peek-mover"><span class="nav-peek-art"></span></span></span>writing</span></a>
+                <a class="current" href="../" aria-current="true"><span class="nav-label"><span class="nav-peek" aria-hidden="true"><span class="nav-peek-mover"><span class="nav-peek-art"></span></span></span>projects</span></a>
+                <a href="https://github.com/sacredcodr"><span class="nav-label"><span class="nav-peek" aria-hidden="true"><span class="nav-peek-mover"><span class="nav-peek-art"></span></span></span>github <span aria-hidden="true">&#8599;</span></span></a>
+                <a href="https://www.linkedin.com/in/yogesh-pachl-2646543b8/"><span class="nav-label"><span class="nav-peek" aria-hidden="true"><span class="nav-peek-mover"><span class="nav-peek-art"></span></span></span>linkedin <span aria-hidden="true">&#8599;</span></span></a>
+            </nav>
+        </header>
+        <main id="main" class="reading-page article project-notes">
+            <a class="back-link" href="../">&larr; all projects</a>
+            <h1>Vellum</h1>
+            <section class="project-note" aria-label="Development journal">
+                <div class="project-note-status">
+                    <span class="project-status" data-status="in-development">In development</span>
+                    <p class="article-meta">notes updated 20 September 2026</p>
+                </div>
+                <p>Vellum is a local Windows vault for notes and passwords. It keeps the library on the computer, with no account, server or password-reset service to become part of the trust model.</p>
+                <p>The project is an exercise in making a small security-sensitive desktop tool understandable. The interface should make the important boundaries visible: what is encrypted, what recovery means, and what an unlocked computer can still expose.</p>
+
+                <h3>working now</h3>
+                <ul>
+                    <li>Create or open a vault, then search separate password and note entries.</li>
+                    <li>Generate passwords and seven-word master passphrases locally.</li>
+                    <li>Lock manually or after inactivity, with masked password fields and a timed clipboard clear.</li>
+                    <li>Create encrypted backups and an explicitly warned-about recovery copy.</li>
+                </ul>
+
+                <details class="dev-note">
+                    <summary>See the current app</summary>
+                    <figure class="project-capture">
+                        <a href="vellum.png"><img src="vellum.png" width="1366" height="768" loading="lazy" alt="Vellum showing a dark local vault workspace with fictional notes and login entries."></a>
+                        <figcaption>The current workspace keeps the library, search and entry editor together. The example data is fictional. Open the image for the full-size view.</figcaption>
+                    </figure>
+                </details>
+
+                <h3>implementation notes</h3>
+                <details class="dev-note">
+                    <summary>A vault is a file, not an account</summary>
+                    <p>Vellum stores the vault locally and opens it with a master passphrase. There is no cloud account, sync service or reset path. That keeps the product small and makes the consequences of losing the passphrase explicit.</p>
+                    <p>The application is built with C++20 and Qt Widgets for Windows x64. The UI is deliberately desktop-shaped: a searchable library on the left, an editor on the right, and lock controls that remain close to the working surface.</p>
+                </details>
+                <details class="dev-note">
+                    <summary>Protecting the vault contents</summary>
+                    <p>New vaults derive a key with Argon2id and encrypt authenticated payloads with XChaCha20-Poly1305 through libsodium. Entry metadata, including titles and URLs, belongs inside the encrypted payload rather than being left in a readable index.</p>
+                    <p>Each save uses a fresh nonce. The file carries a versioned header and revision information so malformed, altered or unexpectedly old data can be rejected before it is treated as a usable vault.</p>
+                </details>
+                <details class="dev-note">
+                    <summary>Backup is different from recovery</summary>
+                    <p>An encrypted backup is another copy of the vault and still needs the master passphrase. It is useful against file loss, but it is not a way around forgetting the key.</p>
+                    <p>A recovery copy is deliberately different: it is unencrypted text containing the master passphrase. Vellum warns before creating one and requires it to live in a different folder. Keeping that copy separate is part of the security decision, not an implementation detail.</p>
+                </details>
+                <details class="dev-note">
+                    <summary>What the app can and cannot protect</summary>
+                    <p>Keys and temporary buffers are cleared where the platform allows it. The app requests clipboard-history exclusion and clears a copied password after ten seconds if clipboard ownership has not changed. Locking also asks Windows to reduce ordinary screen capture.</p>
+                    <p>Those controls are boundaries, not guarantees. Qt widgets can retain plaintext in memory, clipboard managers can copy secrets, crashes can prevent cleanup, and malware or an administrator on an unlocked machine is outside the threat model.</p>
+                </details>
+                <details class="dev-note">
+                    <summary>The honest project status</summary>
+                    <p>Vellum is early development and has not received an independent security audit. The tests cover authentication, tampering, rollback rejection, recovery, input validation and failure handling. Real suspend and resume behaviour, clipboard edge cases, high-DPI accessibility and fault injection still need verification.</p>
+                    <p>Development packages are marked unsigned. Device sync, browser autofill and passkeys are not currently supported.</p>
+                </details>
+
+                <h3>things to explore</h3>
+                <p>The next useful work is less about adding a long feature list and more about testing the boundaries: interruption during save, locked-session transitions, accessibility at high DPI, and how clearly the recovery flow communicates its risk.</p>
+                <details class="dev-note">
+                    <summary>Building it locally</summary>
+                    <p>Vellum currently targets Windows x64 and uses CMake, Qt 6.10.3 and libsodium 1.0.22. The repository contains the build, test and packaging instructions.</p>
+                    <p>Source and current setup notes are available in the <a href="https://github.com/sacredcodr/vellum">GitHub repository</a>.</p>
+                </details>
+                <p class="article-source">These notes describe the local app as of 20 September 2026. Vellum is a personal project, not a security guarantee.</p>
+            </section>
+            <div class="article-cat-end" aria-hidden="true"><span class="ink-cat cat-peek"></span></div>
+        </main>
+    </div>
+</body>
+</html>

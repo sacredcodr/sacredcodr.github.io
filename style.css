@@ -90,11 +90,18 @@ h2 { font-size: 13px; font-weight: 500; margin: 0 0 18px; color: var(--muted); }
 nav { gap: 26px; padding: 0; }
 nav a:nth-child(3) { margin-left: 0; }
 .home-page main { display: grid; grid-template-columns: minmax(0, 340px) minmax(0, 1fr); gap: 72px; margin-top: 76px; }
+.side-sections { border-left: 1px solid var(--line); padding-left: 36px; }
 .intro-label { font: 11px Consolas, monospace; color: var(--muted); margin: 0 0 24px; }
 .intro h1 { font-size: 31px; font-weight: 500; letter-spacing: -0.8px; margin-bottom: 24px; }
 .intro p { font-size: 15px; }
-.writing { margin: 0; border: 0; border-left: 1px solid var(--line); padding: 0 0 34px 36px; }
+.home-project { padding-bottom: 34px; border-bottom: 1px solid var(--line); }
+.home-project h2,
 .writing > h2 { font: 11px Consolas, monospace; margin: 0 0 24px; }
+.home-project-entry h3 { margin: 10px 0 0; font-size: 18px; line-height: 1.5; font-weight: 450; letter-spacing: -0.2px; }
+.home-project-entry h3 a { text-decoration: none; }
+.home-project-entry h3 a:hover { text-decoration: underline; }
+.home-project-entry p { margin-top: 12px; font-size: 14px; line-height: 1.8; color: var(--muted); }
+.writing { margin-top: 34px; border: 0; padding: 0 0 34px; }
 .writing .post-link { border-top: 1px solid var(--line); padding: 18px 0; gap: 5px 14px; }
 .writing .post-link strong { font-size: 18px; font-weight: 450; line-height: 1.5; letter-spacing: -0.2px; }
 .writing .post-summary { font-size: 14px; margin-top: 16px; line-height: 1.8; }
@@ -107,7 +114,8 @@ nav a:nth-child(3) { margin-left: 0; }
     .home-page main { display: block; margin-top: 40px; }
     .intro { max-width: 480px; }
     .intro-label { margin-bottom: 16px; }
-    .writing { margin-top: 40px; padding: 0; border: 0; }
+    .side-sections { margin-top: 40px; padding-left: 0; border-left: 0; }
+    .writing { margin-top: 34px; padding: 0; border: 0; }
     .writing .post-link { padding-top: 20px; }
     .reading-page { margin-top: 34px; }
 }
